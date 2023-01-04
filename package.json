@@ -1,13 +1,10 @@
 {
   "name": "package-json-exercicios",
   "version": "1.0.0",
-  "description": "ATENÇÃO! Não forke nem clone esse repositório. Ele serve apenas como enunciado!<br><br>\r <strong>Você deve criar seu próprio repo pessoal chamado labecommerce-backend. Evite trabalhar na main e crie branches para organizar cada nova implementação ou refatoração. A de hoje por exemplo, pode se chamar node-package-json.</strong>\r ### Comando para criar a branch e já entrar nela\r ```\r git checkout -b node-package-json\r ```",
-  "main": "index.js",
-  "type":"module",
-
+  "description": " ",
+  "main": "index.js",  
   "scripts": {
-    "start":"node index.js",
-    "jogo":"par-ou-impar.js",
+    "start": "tsc  && node ./build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/daniellehonoria/node-package-json-exercicios/issues"
   },
-  "homepage": "https://github.com/daniellehonoria/node-package-json-exercicios#readme"
+  "homepage": "https://github.com/daniellehonoria/node-package-json-exercicios#readme",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "keywords": []
 }
