@@ -1,5 +1,5 @@
-import { user, product, purchase } from "./database";
+import { users, product, purchase, createUser} from "./database";
 
-console.log(user)
+console.log(users)
 console.log(product)
 console.log(purchase)
