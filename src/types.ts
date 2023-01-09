@@ -1,4 +1,6 @@
-/*Refatore o type da entidade product no types.ts
+/*Exercício 1 04/01
+
+Refatore o type da entidade product no types.ts
 utilize um enum para definir pelo menos 3 categorias*/
 
 export enum Category{
@@ -24,5 +26,5 @@ export type TPurchase={
     productId:string
     quantity:number
     totalPrice:number
-}[]
+}
 

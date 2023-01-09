@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.purchase = exports.getProductById = exports.getAllProducts = exports.createProduct = exports.product = exports.getAllUsers = exports.createUser = exports.users = void 0;
+exports.getAllPurchasesFromUserId = exports.createPurchase = exports.queryProductsByName = exports.purchase = exports.getProductById = exports.getAllProducts = exports.createProduct = exports.product = exports.getAllUsers = exports.createUser = exports.users = void 0;
 const types_1 = require("./types");
 exports.users = [
     {
@@ -76,4 +76,24 @@ exports.purchase = [
         totalPrice: 38
     }
 ];
+const queryProductsByName = (q) => {
+    return exports.product.filter((prdct) => {
+        return prdct.name.includes(q);
+    });
+};
+exports.queryProductsByName = queryProductsByName;
+(0, exports.queryProductsByName)("Cookie brilha");
+const createPurchase = (userId, productId, quantity, totalPrice) => {
+    const newPurchase = [{ userId, productId, quantity, totalPrice }];
+    exports.purchase.push(...newPurchase);
+    console.log("Compra realizada com sucesso");
+};
+exports.createPurchase = createPurchase;
+(0, exports.createPurchase)("02", "02", 3, 19 * 3);
+const getAllPurchasesFromUserId = (userIdToSearch) => {
+    return exports.purchase.filter((prchs) => {
+        return prchs.userId === userIdToSearch;
+    });
+};
+exports.getAllPurchasesFromUserId = getAllPurchasesFromUserId;
 //# sourceMappingURL=database.js.map

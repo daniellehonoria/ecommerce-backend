@@ -13,7 +13,7 @@ export const users: TUser[] = [
         email: "beltrana@mail.com",
         password: "abc123",
     }]
-
+//Exercício 2 04/01
 // createUser (cria uma nova pessoa na lista de users)
 // input: três parâmetros (id, email e password)
 // output: frase de sucesso ("Cadastro realizado com sucesso")
@@ -27,7 +27,9 @@ export function createUser(id:string, email:string, password:string):void{
   console.log(users)
 
 
-/*getAllUsers (busca todas as pessoas da lista de users)
+/*//Exercício 2 04/01
+
+getAllUsers (busca todas as pessoas da lista de users)
 input: nenhum
 output: lista atualizada de users
 exemplo de chamada: getAllUsers() */
@@ -52,6 +54,8 @@ export const product: TProduct[] = [
         category: Category.BREAD,
     }]
 
+    ////Exercício 2 04/01
+
 // createProduct (cria um novo produto na lista de products)
 // input: três parâmetros (id, name, price e category)
 // output: frase de sucesso ("Produto criado com sucesso")
@@ -63,6 +67,8 @@ export function createProduct(id:string, name:string, price:number, category:Cat
 }
 
 createProduct("24562", "focaccia", 15, Category.BREAD)
+
+//Exercício 2 04/01
 
 // getAllProducts (busca todos os produtos da lista de products)
 // input: nenhum
@@ -77,6 +83,8 @@ export function getAllProducts():void{
 console.log("Lista de produtos")
 getAllProducts()
 
+//Exercício 2 04/01
+
 // getProductById (busca por produtos baseado em um id da lista de products)
 // input: um parâmetro (idToSearch)
 // output: o produto encontrado ou undefined
@@ -86,7 +94,8 @@ export function getProductById(idToSearch:string):void{
 
 }
 getProductById("02")
-export const purchase: TPurchase = [
+
+export const purchase: TPurchase[] = [
     {
         userId: "01",
         productId: "02",
@@ -102,3 +111,44 @@ export const purchase: TPurchase = [
 
 ]
 
+// Exercício 3 04/01 - Funcionalidades
+// Desenvolva uma função para cada funcionalidade.
+
+// Product
+// queryProductsByName (busca por produtos baseado em um nome da lista de products)
+// input: um parâmetro (q)
+// q é a abreviação de query (termo de busca/consulta)
+// output: lista de produtos com nomes que contenham o termo de busca
+// extra: o resultado da busca deve ser case insensitive
+// exemplo de chamada: queryProductsByName("monitor")
+export const queryProductsByName = (q:string): Array<TProduct> =>{
+    return product.filter((prdct)=>{
+        return prdct.name.includes(q)
+    })
+}
+queryProductsByName("Cookie brilha")
+// Purchase
+// createPurchase (cria uma nova compra na lista de purchases)
+// input: quatro parâmetros (userId, productId, quantity e totalPrice)
+// output: frase de sucesso ("Compra realizada com sucesso")
+// exemplo de chamada: createPurchase("u003", "p004", 2, 1600)
+
+
+
+export const createPurchase = (userId:string, productId:string, quantity:number, totalPrice:number): void=>{
+    const newPurchase: TPurchase[]=[{userId, productId, quantity, totalPrice}]
+    purchase.push(...newPurchase)
+    console.log("Compra realizada com sucesso")
+}
+createPurchase("02", "02", 3, 19*3)
+
+// getAllPurchasesFromUserId (busca todas as compras feitas baseado no id do usuário)
+// input: userIdToSearch
+// output: lista atualizada de compras nas quais o userId delas são do userIdToSearch
+// exemplo de chamada: getAllPurchasesFromUserId("u003")
+
+export const getAllPurchasesFromUserId =(userIdToSearch: string): Array<TPurchase>=>{
+    return purchase.filter((prchs)=>{
+        return prchs.userId === userIdToSearch
+    })
+}
