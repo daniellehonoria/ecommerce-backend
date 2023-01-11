@@ -49,7 +49,57 @@ app.post("/purchase", (req, res) => {
     database_1.purchase.push(newPurchase);
     res.status(201).send("Compra realizada com sucesso");
 });
-console.log(database_1.users);
-console.log(database_1.product);
-console.log(database_1.purchase);
+console.log(database_1.users, database_1.product, database_1.purchase);
+app.get("/product/:id", (req, res) => {
+    const id = req.params.id;
+    const filterProductId = database_1.product.find((prdct) => prdct.id === id);
+    res.status(200).send(filterProductId);
+});
+app.get("/users/:id/purchases", (req, res) => {
+    const id = req.params.id;
+    const filterIdPurchases = database_1.purchase.filter((prchs) => prchs.userId === id);
+    res.status(200).send(filterIdPurchases);
+});
+app.delete("/user/:id", (req, res) => {
+    const id = req.params.id;
+    const delUser = database_1.users.findIndex((usr) => usr.id === id);
+    if (delUser >= 0) {
+        database_1.users.splice(delUser, 1);
+    }
+    res.status(200).send("User deletado com sucesso");
+});
+app.delete("/product/:id", (req, res) => {
+    const id = req.params.id;
+    const delProduct = database_1.product.findIndex((prdct) => prdct.id === id);
+    if (delProduct >= 0) {
+        database_1.product.splice(delProduct, 1);
+    }
+    res.status(200).send("Produto deletado com sucesso");
+});
+app.put("/user/:id", (req, res) => {
+    const id = req.params.id;
+    const newId = req.body.id;
+    const newEmail = req.body.email;
+    const newPassword = req.body.password;
+    const userEdit = database_1.users.find((userEdit) => userEdit.id === id);
+    if (userEdit) {
+        userEdit.id = (newId === undefined ? userEdit.id : newId);
+        userEdit.email = (newEmail === undefined ? userEdit.email : newEmail);
+        userEdit.password = (newPassword === undefined ? userEdit.password : newPassword);
+    }
+    res.status(200).send("Atualização realizada");
+});
+app.put("/product/:id", (req, res) => {
+    const id = req.params.id;
+    const newName = req.body.name;
+    const newPrice = req.body.price;
+    const newCategory = req.body.category;
+    const productEdit = database_1.product.find((productEdit) => productEdit.id === id);
+    if (productEdit) {
+        productEdit.name = (newName === undefined ? productEdit.name : newName);
+        productEdit.price = (newPrice === undefined ? productEdit.price : newPrice);
+        productEdit.category = (newCategory === undefined ? productEdit.category : newCategory);
+    }
+    res.status(200).send("Atualização realizada");
+});
 //# sourceMappingURL=index.js.map

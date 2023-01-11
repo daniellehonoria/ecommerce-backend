@@ -22,7 +22,6 @@ export function createUser(id:string, email:string, password:string):void{
 
 
 //getAllUsers (busca todas as pessoas da lista de users)
-
 export function getAllUsers():void{
     users.map((user)=>{
         console.table(user)
