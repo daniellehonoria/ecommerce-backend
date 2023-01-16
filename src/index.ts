@@ -11,8 +11,6 @@ app.listen(3001, () => {
 });
 
 // ## Get All Users
-// - não precisa de validação, basta refatorar para o uso do try/catch
-// Get All Users
 app.get("/users", (req: Request, res: Response) => {
 
     try {
@@ -29,8 +27,6 @@ app.get("/users", (req: Request, res: Response) => {
 })
 
 // Get All Products
-// ## Get All Products
-// - não precisa de validação, basta refatorar para o uso do try/catch
 app.get("/products", (req: Request, res: Response) => {
     try {
         res.status(200).send(product) //send é o metodo q espera um dado, q no caso é users q está no database 
@@ -46,8 +42,6 @@ app.get("/products", (req: Request, res: Response) => {
 })
 
 // Search Product by name
-// ## Search Product by name
-// - query params deve possuir pelo menos um caractere
 app.get("/product/search", (req: Request, res: Response) => {
     const q = req.query.q as string
 
@@ -78,12 +72,6 @@ app.get("/product/search", (req: Request, res: Response) => {
 })
 
 // Create User
-
-// ## Create User
-// - validar o body
-// - extra:
-//     - não deve ser possível criar mais de uma conta com a mesma id
-//     - não deve ser possível criar mais de uma conta com o mesmo e-mail
 app.post("/users", (req: Request, res: Response) => {
     try {        
         const id = req.body.id
@@ -92,8 +80,6 @@ app.post("/users", (req: Request, res: Response) => {
 
         const idExisting = users.find((users)=> users.id === id)
         const emailExisting = users.find((users)=> users.email === email)
-
-
 
         if (idExisting) {
 			throw new Error("'Id' já cadastrado") 
@@ -114,10 +100,7 @@ app.post("/users", (req: Request, res: Response) => {
     }
 
 })
-// ## Create Product
-// - validar o body
-// - extra:
-//     - não deve ser possível criar mais de um produto com a mesma id
+
 // Create Product
 app.post("/newproduct", (req: Request, res: Response) => {
         const id = req.body.id
@@ -138,19 +121,13 @@ app.post("/newproduct", (req: Request, res: Response) => {
     } catch (error: any) {
         console.log(error)
 
-        if (res.statusCode === 200) {//tratamento de erro pra erro inesperado
+        if (res.statusCode === 200) {
             res.status(500)
         }
         res.send(error.message)
     }
 })
 
-// ## Create Purchase
-// - validar o body
-// - extra:
-//     - id do usuário que fez a compra deve existir no array de usuários cadastrados
-//     - id do produto que foi comprado deve existir no array de produtos cadastrados
-//     - a quantidade e o total da compra devem estar com o cálculo correto
 // Create Purchase
 app.post("/purchase", (req: Request, res: Response) => {
     
@@ -171,7 +148,6 @@ app.post("/purchase", (req: Request, res: Response) => {
         throw new Error("'Id' de produto não encontrado") 
     }
 
-
     if(productId.price * quantity !== totalPrice){
         res.status(400)
         throw new Error("Total incorreto") 
@@ -187,7 +163,6 @@ app.post("/purchase", (req: Request, res: Response) => {
         if (res.statusCode === 200) {
             res.status(500)
         }
-
         res.send(error.message)
     }
 
@@ -195,7 +170,6 @@ app.post("/purchase", (req: Request, res: Response) => {
 console.log(users, product, purchase)
 
 // Get Products by id
-// validar que o produto existe
 app.get("/product/:id", (req: Request, res: Response) => {
     
     try {
@@ -218,7 +192,6 @@ app.get("/product/:id", (req: Request, res: Response) => {
 })
 
 // Get User Purchases by User id
-// validar que o usuário existe
 app.get("/users/:id/purchases", (req: Request, res: Response) => {
     try {
     const id = req.params.id
@@ -240,30 +213,20 @@ app.get("/users/:id/purchases", (req: Request, res: Response) => {
     }
 
 })
-//filter = retorna array
-//find = retorna um item ou undefined
-//findIndex= retorna o item a partir do indice
 
 // Delete User by id
-
-// validar que o usuário existe
 app.delete("/user/:id", (req: Request, res: Response) => {
 
     try {
     const id = req.params.id
     const idExisting = product.find((prdct)=> prdct.id === id)
 
-    //findIndex encontra o indice do item a ser removido
     const delUser = users.findIndex((usr) => usr.id === id)
     if(!idExisting){
         res.status(400)
         throw new Error("Usuário não encontrado")
     }
-    //só deleta caso o indice seja válido (ou seja, encontrou o item)
     if (delUser >= 0) {
-        //splice p/ editar diretamente o array accounts
-        //primeiro arg é o indice o alvo
-        //segundo arg é quantos itens serão removidos a partir do alvo
         users.splice(delUser, 1)
     }
     res.status(200).send("User deletado com sucesso") 
@@ -280,8 +243,6 @@ app.delete("/user/:id", (req: Request, res: Response) => {
 
 
 // Delete Product by id
-
-// validar que o produto existe
 app.delete("/product/:id", (req: Request, res: Response) => {
 
     try {    
@@ -310,9 +271,6 @@ app.delete("/product/:id", (req: Request, res: Response) => {
 })
 
 // Edit User by id
-
-// validar que o usuário existe
-// validar o body
 app.put("/user/:id", (req: Request, res: Response) => {
 
     try {
@@ -344,9 +302,6 @@ app.put("/user/:id", (req: Request, res: Response) => {
 })
 
 // Edit Product by id
-
-// validar que o produto existe
-// validar o body
 app.put("/product/:id", (req: Request, res: Response) => {
     const id = req.params.id
     const newName = req.body.name as string | undefined
@@ -373,8 +328,5 @@ try {
     
 })
 
-
-
-
-
 //https://documenter.getpostman.com/view/24460604/2s8ZDU64nU
+
