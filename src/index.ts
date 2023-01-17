@@ -211,7 +211,6 @@ app.get("/users/:id/purchases", (req: Request, res: Response) => {
         }
         res.send(error.message)
     }
-
 })
 
 // Delete User by id
