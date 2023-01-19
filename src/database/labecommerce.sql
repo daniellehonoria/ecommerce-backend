@@ -35,30 +35,28 @@ SELECT*FROM products;
 INSERT INTO products(id, name, price, category)
 VALUES ("016", "carolina", 4.50, "BREAD");
 
-
-INSERT INTO users(id, email, password) --insere dados à tabela
+INSERT INTO users(id, email, password) 
 VALUES ("220", "user220@user.com", "gdsbv23"), ("221", "user221@user.com", "dsf4"), ("222", "user222@user.com", "dbfg222");
 
-UPDATE users SET email= "emaileditado@mail.com" WHERE id ="325"; --edita dados da tabela
+UPDATE users SET email= "emaileditado@mail.com" WHERE id ="325"; 
 
-DELETE FROM users WHERE id = "221"; -- deleta dados da tabela
+DELETE FROM users WHERE id = "221"; 
 
------------EXERCICIO 1---------
 --Get All Users -- retorna todos os usuários cadastrados
 SELECT*FROM users;
 
 --Get All Products-- retorna todos os produtos cadastrados
 SELECT*FROM products;
 
---Search Product by name-- mocke um termo de busca, exemplo "monitor" -- retorna o resultado baseado no termo de busca
+--Search Product by name-- 
 SELECT * FROM products
 WHERE name ="croissant";
 
--- Create User-- mocke um novo usuário-- insere o item mockado na tabela users
+-- Create User-- 
 INSERT INTO users(id, email, password)
 VALUES ("22", "user8@mail.com", "jdh12");
 
---Create Product-- mocke um novo produto-- insere o item mockado na tabela products
+--Create Product-- 
 INSERT INTO products(id, name, price, category)
 VALUES ("001", "sonho", 6.50, "BREAD"),
  ("002", "pão de leite", 1.30, "BREAD"),
@@ -79,43 +77,100 @@ VALUES ("001", "sonho", 6.50, "BREAD"),
  ("022", "pão francês", 0.90, "BREAD"),
  ("023", "bolo de laranja", 20, "CAKE");
 
-----------EXERCÍCIO 2----------------
 
---Get Products by id--mocke uma id--busca baseada no valor mockado
+--Get Products by id--
 SELECT * FROM products
 WHERE id = "012";
 
---Delete User by id--mocke uma id--delete a linha baseada no valor mockado
+--Delete User by id--
 DELETE FROM users WHERE id = "22";
 SELECT * FROM products;
---Delete Product by id--mocke uma id--delete a linha baseada no valor mockado
+--Delete Product by id--
 DELETE FROM products WHERE id="013";
 
 --Edit User by id--mocke valores para editar um user--edite a linha baseada nos valores mockados
 UPDATE users SET email= "email@editado.com", password="1354" WHERE id ="222"; --edita dados da tabela
 
---Edit Product by id--mocke valores para editar um product--edite a linha baseada nos valores mockados
+--Edit Product by id--
 UPDATE products SET price= "3.6" WHERE id= "016";
-
-----------EXERCÍCIO 3---------------
---Copie as queries do exercício 1 e refatore-as
 
 --Get All Users -- retorna o resultado ordenado pela coluna name em ordem crescente
 SELECT * FROM users
 ORDER BY email ASC;
 
---Get All Products versão 1
---retorna o resultado ordenado pela coluna price em ordem crescente
---limite o resultado em 20 iniciando pelo primeiro item
+--Get All Products 1--price em ordem crescente- max 20 resultados a partir do primeiro item
 SELECT*FROM products
 ORDER BY price ASC
 LIMIT 20;
 
---Get All Products versão 2
---mocke um intervalo de preços, por exemplo entre 100.00 e 300.00
---retorna os produtos com preços dentro do intervalo mockado em ordem crescente
+--Get All Products 2-- intervalo de preços mockado exibidos em ordem crescente
 SELECT * FROM products
 WHERE price >="5" AND price <="15"
 ORDER BY price ASC;
 
+/*Exercício 1
+Criação da tabela de pedidos
+nome da tabela: purchases
+colunas da tabela:
+id (TEXT, PK, único e obrigatório)
+total_price (REAL, único e obrigatório)
+paid (INTEGER e obrigatório)
+delivered_at (TEXT e opcional)
+buyer_id (TEXT, obrigatório e FK = referencia a coluna id da tabela users)
+Observações
+A coluna paid será utilizada para guardar uma lógica booleana. O SQLite recomenda o uso do número 0 para false e 
+1 para true. Os pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
+
+A coluna delivered_at será utilizada para gerenciar a data de entrega do pedido. Ela é opcional, porque sempre começará 
+sem valor ao criar um pedido, ou seja, null. O SQLite recomenda utilizar TEXT para lidar com strings no formato ISO8601 
+"aaaa-mm-dd hh:mm:sss". Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato.*/
+
+CREATE TABLE purchases(
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    total_price REAL UNIQUE NOT NULL,
+    paid INTEGER NOT NULL, --guarda logica booleana--pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
+    delivered_at TEXT,--gerencia data de entrega do pedido--Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato.
+    buyer_id TEXT NOT NULL, --FK = referencia a coluna id da tabela users
+    FOREIGN KEY(buyer_id) REFERENCES users(id)
+);
+DROP TABLE purchases;
+
+/*Exercício 2
+Popule sua tabela de pedidos, criada no exercício anterior.
+Por enquanto não se preocupe em adicionar produtos ao pedido, veremos isso na aula que vem.
+Com isso em mente, crie um valor aleatório para o preço total do pedido.
+
+a) Crie dois pedidos para cada usuário cadastrado
+No mínimo 4 no total (ou seja, pelo menos 2 usuários diferentes) e devem iniciar com a data de entrega nula.
+
+b) Edite o status da data de entrega de um pedido
+Simule que o pedido foi entregue no exato momento da sua edição (ou seja, data atual).*/
+
+INSERT INTO purchases VALUES("p001", 33.20, 1 , "18-01-2022", 258);
+INSERT INTO purchases VALUES("p002", 38.25, 1 , "18-01-2022", 258);
+SELECT*FROM users;
+
+INSERT INTO purchases 
+VALUES
+("p001", 33.20, 1 , NULL, 258),
+("p002", 38.25, 1 , NULL, 258),
+("p003", 68.30, 1 , NULL, 214),
+("p004", 28.30, 0 , NULL, 214),
+("p005", 23.25, 0 , NULL, 325),
+("p006", 35.30, 1 , NULL, 325),
+("p007", 42.10, 1 , NULL, 220),
+("p008", 41.30, 0 , NULL, 220),
+("p009", 25.30, 1 , NULL, 222),
+("p010", 28.60, 1 , NULL, 222);
+
+/*Crie a query de consulta utilizando junção para simular um endpoint de histórico de compras de um determinado usuário.
+Mocke um valor para a id do comprador, ela deve ser uma das que foram utilizadas no exercício 2.*/
+
+SELECT * FROM purchases
+INNER JOIN users
+ON purchases.buyer_id = users.id;
+
+UPDATE purchases
+SET delivered_at = DATETIME()
+WHERE id="p010";
 
