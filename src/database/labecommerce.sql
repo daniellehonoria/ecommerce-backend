@@ -43,7 +43,6 @@ UPDATE users SET email= "emaileditado@mail.com" WHERE id ="325"; --edita dados d
 
 DELETE FROM users WHERE id = "221"; -- deleta dados da tabela
 
------------EXERCICIO 1---------
 --Get All Users -- retorna todos os usuários cadastrados
 SELECT*FROM users;
 
@@ -79,7 +78,6 @@ VALUES ("001", "sonho", 6.50, "BREAD"),
  ("022", "pão francês", 0.90, "BREAD"),
  ("023", "bolo de laranja", 20, "CAKE");
 
-----------EXERCÍCIO 2----------------
 
 --Get Products by id--mocke uma id--busca baseada no valor mockado
 SELECT * FROM products
@@ -97,16 +95,12 @@ UPDATE users SET email= "email@editado.com", password="1354" WHERE id ="222"; --
 --Edit Product by id--mocke valores para editar um product--edite a linha baseada nos valores mockados
 UPDATE products SET price= "3.6" WHERE id= "016";
 
-----------EXERCÍCIO 3---------------
---Copie as queries do exercício 1 e refatore-as
 
 --Get All Users -- retorna o resultado ordenado pela coluna name em ordem crescente
 SELECT * FROM users
 ORDER BY email ASC;
 
 --Get All Products versão 1
---retorna o resultado ordenado pela coluna price em ordem crescente
---limite o resultado em 20 iniciando pelo primeiro item
 SELECT*FROM products
 ORDER BY price ASC
 LIMIT 20;
@@ -119,3 +113,116 @@ WHERE price >="5" AND price <="15"
 ORDER BY price ASC;
 
 
+/*Exercício 1
+Criação da tabela de pedidos
+A coluna paid será utilizada para guardar uma lógica booleana. O SQLite recomenda o uso do número 0 para false e 
+1 para true. Os pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
+A coluna delivered_at será utilizada para gerenciar a data de entrega do pedido. Ela é opcional, porque sempre começará 
+sem valor ao criar um pedido, ou seja, null. O SQLite recomenda utilizar TEXT para lidar com strings no formato ISO8601 
+"aaaa-mm-dd hh:mm:sss". Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato.*/
+
+CREATE TABLE purchases(
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    total_price REAL UNIQUE NOT NULL,
+    paid INTEGER NOT NULL, --guarda logica booleana--pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
+    delivered_at TEXT,--gerencia data de entrega do pedido--Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato.
+    buyer_id TEXT NOT NULL, --FK = referencia a coluna id da tabela users
+    FOREIGN KEY(buyer_id) REFERENCES users(id)
+);
+DROP TABLE purchases;
+
+/*Exercício 2
+Popule sua tabela de pedidos, criada no exercício anterior.
+Por enquanto não se preocupe em adicionar produtos ao pedido, veremos isso na aula que vem.
+Com isso em mente, crie um valor aleatório para o preço total do pedido.
+a) Crie dois pedidos para cada usuário cadastrado
+No mínimo 4 no total (ou seja, pelo menos 2 usuários diferentes) e devem iniciar com a data de entrega nula.
+b) Edite o status da data de entrega de um pedido
+Simule que o pedido foi entregue no exato momento da sua edição (ou seja, data atual).*/
+
+SELECT*FROM users;
+
+INSERT INTO purchases 
+VALUES
+("p001", 33.20, 1 , NULL, 258),
+("p002", 38.25, 1 , NULL, 258),
+("p003", 68.30, 1 , NULL, 214),
+("p004", 28.30, 0 , NULL, 214),
+("p005", 23.25, 0 , NULL, 325),
+("p006", 35.30, 1 , NULL, 325),
+("p007", 42.10, 1 , NULL, 220),
+("p008", 41.30, 0 , NULL, 220),
+("p009", 25.30, 1 , NULL, 222),
+("p010", 28.60, 1 , NULL, 222);
+
+--Crie a query de consulta utilizando junção para simular um endpoint de histórico de compras de um determinado usuário.
+SELECT * FROM purchases
+INNER JOIN users
+ON purchases.buyer_id = users.id;
+
+UPDATE purchases
+SET delivered_at = DATETIME()
+WHERE id="p010";
+
+/*EXERCÍCIO 1
+Criação da tabela de relações
+nome da tabela: purchases_products
+colunas da tabela:
+purchase_id (TEXT e obrigatório, não deve ser único)
+product_id (TEXT e obrigatório, não deve ser único)
+quantity (INTEGER e obrigatório, não deve ser único)
+Como essa lógica funciona?
+Cada compra é registrada uma única vez na tabela purchases.
+Cada produto da mesma compra é registrado uma única vez na tabela purchases_products.
+Exemplo:
+
+uma pessoa coloca 5 laranjas (p001) e 3 bananas (p002) no carrinho e confirma sua compra
+
+a compra é registrada com id c001 na tabela purchases
+
+a seguir, cada item do carrinho é registrado na tabela purchases_products
+5 laranjas são registradas na tabela purchases_products (c001, p001, 5)
+3 bananas são registradas na tabela purchases_products (c001, p002, 3)*/
+
+CREATE TABLE purchases_products(
+    purchase_id TEXT NOT NULL,
+    product_id TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    FOREIGN KEY (purchase_id) REFERENCES purchases(id)
+    FOREIGN key (product_id) REFERENCES products(id)
+);
+DROP TABLE purchases_products;
+SELECT * from purchases_products;
+--------------------EXERCÍCIO 2--------------------------
+--Popule sua tabela purchases_products simulando 3 compras de clientes.
+
+INSERT INTO purchases_products(purchase_id, product_id, quantity)
+VALUES("p001","001", 5 ),
+("p003","008", 7 ),
+("p009","015", 3 );
+
+--Consulta com junção INNER JOIN
+--Mostre em uma query todas as colunas das tabelas relacionadas 
+--(purchases_products, purchases e products).
+
+SELECT 
+purchases.id AS purchaseId,
+purchases.total_price AS totalPrice,
+purchases.paid,
+purchases.delivered_at as deliverDate,
+purchases.buyer_id as buyerId,
+products.id as productId,
+products.name as productName,
+products.price,
+products.category
+FROM purchases
+LEFT JOIN purchases_products
+ON purchases_products.purchase_id = purchases.id
+INNER JOIN products
+ON purchases_products.product_id = products.id;
+
+
+--tabela pai  é a primeira q criei, ou uma tabela em q todos vao consumir
+-- on chama interseção entre dados iguais nas tabelas pra eles ñ se repetirem
+-- left join pra tabela de relaçao
+-- inner join indexa informaçao de outra tabela
