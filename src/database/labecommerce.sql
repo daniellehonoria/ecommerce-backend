@@ -174,3 +174,62 @@ UPDATE purchases
 SET delivered_at = DATETIME()
 WHERE id="p010";
 
+/*EXERCÍCIO 1
+Criação da tabela de relações
+nome da tabela: purchases_products
+colunas da tabela:
+purchase_id (TEXT e obrigatório, não deve ser único)
+product_id (TEXT e obrigatório, não deve ser único)
+quantity (INTEGER e obrigatório, não deve ser único)
+Como essa lógica funciona?
+Cada compra é registrada uma única vez na tabela purchases.
+Cada produto da mesma compra é registrado uma única vez na tabela purchases_products.
+Exemplo:
+uma pessoa coloca 5 laranjas (p001) e 3 bananas (p002) no carrinho e confirma sua compra
+a compra é registrada com id c001 na tabela purchases
+a seguir, cada item do carrinho é registrado na tabela purchases_products
+5 laranjas são registradas na tabela purchases_products (c001, p001, 5)
+3 bananas são registradas na tabela purchases_products (c001, p002, 3)*/
+
+CREATE TABLE purchases_products(
+    purchase_id TEXT NOT NULL,
+    product_id TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    FOREIGN KEY (purchase_id) REFERENCES purchases(id)
+    FOREIGN key (product_id) REFERENCES products(id)
+);
+DROP TABLE purchases_products;
+SELECT * from purchases_products;
+--------------------EXERCÍCIO 2--------------------------
+--Popule sua tabela purchases_products simulando 3 compras de clientes.
+
+INSERT INTO purchases_products(purchase_id, product_id, quantity)
+VALUES("p001","001", 5 ),
+("p003","008", 7 ),
+("p009","015", 3 );
+
+--Consulta com junção INNER JOIN
+--Mostre em uma query todas as colunas das tabelas relacionadas 
+--(purchases_products, purchases e products).
+
+SELECT 
+purchases.id AS purchaseId,
+purchases.total_price AS totalPrice,
+purchases.paid,
+purchases.delivered_at as deliverDate,
+purchases.buyer_id as buyerId,
+products.id as productId,
+products.name as productName,
+products.price,
+products.category
+FROM purchases
+LEFT JOIN purchases_products
+ON purchases_products.purchase_id = purchases.id
+INNER JOIN products
+ON purchases_products.product_id = products.id;
+
+
+--tabela pai  é a primeira q criei, ou uma tabela em q todos vao consumir
+-- on chama interseção entre dados iguais nas tabelas pra eles ñ se repetirem
+-- left join pra tabela de relaçao
+-- inner join indexa informaçao de outra tabela
