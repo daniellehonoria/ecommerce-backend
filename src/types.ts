@@ -17,7 +17,8 @@ export type TProduct={
 }
 
 export type TPurchase={
-    userId:string
+    buyer_id:string
+    purchase_id:string
     productId:string
     quantity:number
     totalPrice:number

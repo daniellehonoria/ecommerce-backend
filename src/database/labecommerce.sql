@@ -1,16 +1,32 @@
 -- Active: 1673891332498@@127.0.0.1@3306
 CREATE TABLE users( -- cria tabela
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL
 );
+-- Create User
+-- method HTTP (POST)
+-- path ("/users")
+-- body
+-- id
+-- name
+-- email
+-- password
+-- createdAt
+-- response
+-- status 201
+-- "Cadastro realizado com sucesso"
 
-INSERT INTO users(id, email, password)
-VALUES ("258", "user@user.com", "senha123");
-INSERT INTO users(id, email, password)
-VALUES ("214", "new@user.com", "2147f");
-INSERT INTO users(id, email, password)
-VALUES ("325", "user3@mail.com", "senha345");
+DROP TABLE users;
+INSERT INTO users(id, name, email, password)
+VALUES ("u001", "Pablo","pablo@mail.com", "senha123"), 
+("u002","Gloria", "gloria@mail.com", "2147f"), 
+("u003","Ana Carolina", "anac@mail.com", "senha345"),
+("u004","Cassia", "cassia@mail.com", "gdsbv23"), 
+("u005", "Liniker","liniker@mail.com", "dsf4"), 
+("u006","Djavan", "djavan@mail.com", "dbfg222"),
+("u007","Pericles", "pericles@mail.com", "jdh12");
 
 SELECT*FROM users;
 SELECT email FROM users;
@@ -18,29 +34,14 @@ CREATE TABLE products(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     name TEXT  NOT NULL,
     price REAL NOT NULL,
+    description TEXT,
+    imageURL TEXT,
     category TEXT NOT NULL
 );
-INSERT INTO products(id, name, price, category)
-VALUES ("012", "pão de queijo", 7, "bread");
 
-INSERT INTO products(id, name, price, category)
-VALUES ("013", "bolo de banana", 23, "CAKE");
-
-INSERT INTO products(id, name, price, category)
-VALUES ("014", "cupcake", 9.99, "CAKE");
-INSERT INTO products(id, name, price, category)
-VALUES ("015", "croissant", 8.50, "BREAD");
 SELECT*FROM products;
+DROP TABLE products;
 
-INSERT INTO products(id, name, price, category)
-VALUES ("016", "carolina", 4.50, "BREAD");
-
-INSERT INTO users(id, email, password) 
-VALUES ("220", "user220@user.com", "gdsbv23"), ("221", "user221@user.com", "dsf4"), ("222", "user222@user.com", "dbfg222");
-
-UPDATE users SET email= "emaileditado@mail.com" WHERE id ="325"; 
-
-DELETE FROM users WHERE id = "221"; 
 
 --Get All Users -- retorna todos os usuários cadastrados
 SELECT*FROM users;
@@ -52,30 +53,30 @@ SELECT*FROM products;
 SELECT * FROM products
 WHERE name ="croissant";
 
--- Create User-- 
-INSERT INTO users(id, email, password)
-VALUES ("22", "user8@mail.com", "jdh12");
-
 --Create Product-- 
-INSERT INTO products(id, name, price, category)
-VALUES ("001", "sonho", 6.50, "BREAD"),
- ("002", "pão de leite", 1.30, "BREAD"),
- ("003", "torta de palmito", 31, "CAKE"),
- ("004", "broa de milho", 6.25, "BREAD"),
- ("005", "torta de morango", 26.50, "CAKE"),
- ("006", "chipa de queijo", 1.50, "COOKIE"),
- ("007", "biscoito de polvilho", 8.50, "COOKIE"),
- ("008", "baguete de atum", 18.50, "BREAD"),
- ("009", "torta de frango", 33, "CAKE"),
- ("010", "pão integral", 1.50, "BREAD"),
- ("011", "pão de azeitona", 13.50, "BREAD"),
- ("013", "torta holandesa", 9, "BREAD"),
- ("017", "bolo de fubá", 18, "CAKE"),
- ("018", "catarina de gorgonzola", 17.50, "BREAD"),
- ("019", "enroladinho de presunto", 3.50, "BREAD"),
- ("021", "dadinho de tapioca", 0.90, "BREAD"),
- ("022", "pão francês", 0.90, "BREAD"),
- ("023", "bolo de laranja", 20, "CAKE");
+INSERT INTO products(id, name, price, description, imageURL, category)
+VALUES ("001", "sonho", 6.50, "pão doce, frito e recheado","https://imagensemoldes.com.br/wp-content/uploads/2020/05/Sonho-Doces-PNG.png","BREAD"),
+ ("002", "pão de leite", 1.30,"pão feito com leite, farinha e ovos","https://thumbs.dreamstime.com/b/p%C3%A3o-de-leite-em-fundo-branco-franc%C3%AAs-num-172673083.jpg", "BREAD"),
+ ("003", "torta de palmito", 31, "Torta vegana recheada com palmito","https://i0.statig.com.br/bancodeimagens/au/ih/zp/auihzpzmxnvstxiv5x1nbbgpf.jpg", "CAKE"),
+ ("004", "broa de milho", 6.25, "Paozinho vegano feito a partir da farinha de milho","https://thumbs.dreamstime.com/b/p%C3%A3o-brasileiro-de-milho-em-fundo-branco-isolado-queijo-caseiro-chamado-broa-ou-broinha-alimentos-junho-e-julho-do-june-189019510.jpg", "BREAD"),
+ ("005", "torta de morango", 26.50,"Torta com massa de bisoito, creme branco e morangos", "https://diariodonordeste.verdesmares.com.br/image/contentid/policy:1.3209848:1648478607/torta%20de%20morango.jpg?f=16x9&h=240&w=425&$p$f$h$w=6e1ebfb", "CAKE"),
+ ("006", "bolo de laranja", 20, "Bolo simples de laranja","https://tudoela.com/wp-content/uploads/2018/12/como-fazer-bolo-de-laranja-810x608.jpg","CAKE"),
+ ("007", "pão francês", 0.90, "Paozinho francês fresquinho","https://i.pinimg.com/originals/c8/dc/0f/c8dc0f722cffc5cef826add0a314a8e1.jpg", "BREAD"),
+ ("008", "baguete", 8.50, "Pão de aproximadamente 30 cm", "https://img.freepik.com/fotos-premium/pao-baguete-no-fundo-branco_1339-57054.jpg?w=2000","BREAD"),
+ ("009", "torta de frango", 33, "Torta recheada com frango e requeijão","https://claudia.abril.com.br/wp-content/uploads/2020/02/receita-torta-frango-catupiry.jpg?quality=85&strip=info", "CAKE"),
+ ("010", "pão integral", 1.50,"Pão francês feito com farinha integral", "https://trimais.vteximg.com.br/arquivos/ids/1023808-1000-1000/foto_original.jpg?v=637604821054100000", "BREAD"),
+ ("011", "bisnaguinha", 13.50, "Mini pãezinhos artesanais tipo bisnaguinha" ,"https://static.wixstatic.com/media/923345_3bb6bb01fa914acb906da23fd3234008~mv2.png/v1/fill/w_1772,h_1772,al_c/923345_3bb6bb01fa914acb906da23fd3234008~mv2.png","BREAD"),
+ ("012", "pão de queijo", 7,"Pão de queijo feito com polvilho e queijo canastra","https://panutti.com.br/arquivos/produtos/imagens_adicionais/P%C3%A3o%20de%20Queijo-209.jpg", "BREAD"),
+ ("013", "torta holandesa", 9, "Torta de bolacha com ganache e creme branco","https://www.receitasdemae.com.br/wp-content/uploads/2011/10/torta-holandesa.jpg","BREAD"),
+ ("014", "cupcake", 9.99, "Bolinhos individuais de sabores diversos", "https://cdn1-production-images-kly.akamaized.net/Odj6Em98u6S7g7ij23nNHsylBII=/1200x675/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/769894/original/003686400_1416569314-url.jpg","CAKE"),
+ ("015", "croissant", 8.50, "Pão de massa folhada", "https://i0.wp.com/porkworld.com.br/wp-content/uploads/2021/07/croissant-receita-como-fazer.png?fit=1920%2C1280&ssl=1", "BREAD"),
+ ("016", "carolina", 4.50, "Pão doce recheado com doce de leite e coberto com chocolate", "https://emporiokaminski.com.br/wp-content/uploads/2020/06/carolina-03.jpg","BREAD"),
+ ("017", "bolo de fubá", 18, "Bolo vegano feito com fubá", "https://www.ocadomilho.com/wp-content/uploads/2018/05/OCA-DO-MILHO-fundo-branco-98.jpg", "CAKE"),
+ ("018", "alfajor", 9.50,"Biscoitos argentinos com recheio de doce de leite e cobertura de chocolate","https://i0.wp.com/anamariabraga.globo.com/wp-content/uploads/2020/06/alfajor-de-chocolate-diet.jpg?fit=1200%2C675&ssl=1", "COOKIE"),
+ ("019", "enroladinho de presunto", 3.50,"Paozinho recheado com presunto e queijo","https://www.tortamania.com.br/files/product/image/118/xvga_tortamania_saldado.png", "BREAD"),
+ ("021", "dadinho de tapioca", 0.90,"Quadradinhos fritos de tapioca com queijo", "https://images.rappi.com.br/products/2098988396-1605144678192.png", "BREAD"),
+ ("022", "empadinha", 7.90,"Tortinhas com massa amanteigada, sabores diversos", "https://http2.mlstatic.com/D_NQ_NP_217501-MLB20344654852_072015-O.jpg", "CAKE")
+ ;
 
 
 --Get Products by id--
@@ -108,22 +109,6 @@ SELECT * FROM products
 WHERE price >="5" AND price <="15"
 ORDER BY price ASC;
 
-/*Exercício 1
-Criação da tabela de pedidos
-nome da tabela: purchases
-colunas da tabela:
-id (TEXT, PK, único e obrigatório)
-total_price (REAL, único e obrigatório)
-paid (INTEGER e obrigatório)
-delivered_at (TEXT e opcional)
-buyer_id (TEXT, obrigatório e FK = referencia a coluna id da tabela users)
-Observações
-A coluna paid será utilizada para guardar uma lógica booleana. O SQLite recomenda o uso do número 0 para false e 
-1 para true. Os pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
-
-A coluna delivered_at será utilizada para gerenciar a data de entrega do pedido. Ela é opcional, porque sempre começará 
-sem valor ao criar um pedido, ou seja, null. O SQLite recomenda utilizar TEXT para lidar com strings no formato ISO8601 
-"aaaa-mm-dd hh:mm:sss". Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato.*/
 
 CREATE TABLE purchases(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
@@ -135,25 +120,12 @@ CREATE TABLE purchases(
 );
 DROP TABLE purchases;
 
-/*Exercício 2
-Popule sua tabela de pedidos, criada no exercício anterior.
-Por enquanto não se preocupe em adicionar produtos ao pedido, veremos isso na aula que vem.
-Com isso em mente, crie um valor aleatório para o preço total do pedido.
-
-a) Crie dois pedidos para cada usuário cadastrado
-No mínimo 4 no total (ou seja, pelo menos 2 usuários diferentes) e devem iniciar com a data de entrega nula.
-
-b) Edite o status da data de entrega de um pedido
-Simule que o pedido foi entregue no exato momento da sua edição (ou seja, data atual).*/
-
 INSERT INTO purchases VALUES("p001", 33.20, 1 , "18-01-2022", 258);
 INSERT INTO purchases VALUES("p002", 38.25, 1 , "18-01-2022", 258);
 SELECT*FROM users;
 
 INSERT INTO purchases 
 VALUES
-("p001", 33.20, 1 , NULL, 258),
-("p002", 38.25, 1 , NULL, 258),
 ("p003", 68.30, 1 , NULL, 214),
 ("p004", 28.30, 0 , NULL, 214),
 ("p005", 23.25, 0 , NULL, 325),
@@ -163,8 +135,7 @@ VALUES
 ("p009", 25.30, 1 , NULL, 222),
 ("p010", 28.60, 1 , NULL, 222);
 
-/*Crie a query de consulta utilizando junção para simular um endpoint de histórico de compras de um determinado usuário.
-Mocke um valor para a id do comprador, ela deve ser uma das que foram utilizadas no exercício 2.*/
+SELECT * from purchases;
 
 SELECT * FROM purchases
 INNER JOIN users
@@ -173,23 +144,6 @@ ON purchases.buyer_id = users.id;
 UPDATE purchases
 SET delivered_at = DATETIME()
 WHERE id="p010";
-
-/*EXERCÍCIO 1
-Criação da tabela de relações
-nome da tabela: purchases_products
-colunas da tabela:
-purchase_id (TEXT e obrigatório, não deve ser único)
-product_id (TEXT e obrigatório, não deve ser único)
-quantity (INTEGER e obrigatório, não deve ser único)
-Como essa lógica funciona?
-Cada compra é registrada uma única vez na tabela purchases.
-Cada produto da mesma compra é registrado uma única vez na tabela purchases_products.
-Exemplo:
-uma pessoa coloca 5 laranjas (p001) e 3 bananas (p002) no carrinho e confirma sua compra
-a compra é registrada com id c001 na tabela purchases
-a seguir, cada item do carrinho é registrado na tabela purchases_products
-5 laranjas são registradas na tabela purchases_products (c001, p001, 5)
-3 bananas são registradas na tabela purchases_products (c001, p002, 3)*/
 
 CREATE TABLE purchases_products(
     purchase_id TEXT NOT NULL,
@@ -233,3 +187,7 @@ ON purchases_products.product_id = products.id;
 -- on chama interseção entre dados iguais nas tabelas pra eles ñ se repetirem
 -- left join pra tabela de relaçao
 -- inner join indexa informaçao de outra tabela
+
+
+
+
