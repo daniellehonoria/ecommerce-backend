@@ -120,20 +120,20 @@ CREATE TABLE purchases(
 );
 DROP TABLE purchases;
 
-INSERT INTO purchases VALUES("p001", 33.20, 1 , "18-01-2022", 258);
-INSERT INTO purchases VALUES("p002", 38.25, 1 , "18-01-2022", 258);
 SELECT*FROM users;
 
 INSERT INTO purchases 
 VALUES
-("p003", 68.30, 1 , NULL, 214),
-("p004", 28.30, 0 , NULL, 214),
-("p005", 23.25, 0 , NULL, 325),
-("p006", 35.30, 1 , NULL, 325),
-("p007", 42.10, 1 , NULL, 220),
-("p008", 41.30, 0 , NULL, 220),
-("p009", 25.30, 1 , NULL, 222),
-("p010", 28.60, 1 , NULL, 222);
+("p001", 68.30, 1 , NULL, "u001"),
+("p002", 150, 1 , NULL, "u001"),
+("p003", 41.20, 1 , NULL, "u002"),
+("p004", 28.30, 0 , NULL, "u004"),
+("p005", 23.25, 0 , NULL, "u002"),
+("p006", 35.30, 1 , NULL, "u003"),
+("p007", 42.10, 1 , NULL, "u005"),
+("p008", 41.30, 0 , NULL, "u006"),
+("p009", 25.30, 1 , NULL, "u006"),
+("p010", 28.60, 1 , NULL, "u007");
 
 SELECT * from purchases;
 
