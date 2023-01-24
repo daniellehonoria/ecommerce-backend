@@ -234,18 +234,16 @@ app.post("/newproduct", async(req: Request, res: Response) => {
 app.post("/purchase", async(req: Request, res: Response) => {
     
     try {
-        
-    const purchaseId = req.body.id
-    //const userId = req.body.userId
+    const purchaseId = req.body.purchase_id
     //const productId = req.body.productId
    // const quantity = req.body.quantity
-    const buyer_id = req.body.buyer_id
+    const buyer_id = req.body.buyer_id// id do comprador(user)
     const totalPrice = req.body.total_price
-    const paid = req.body.paid;
+    const paid = req.body.paid;//pago
     //const delivered_at = req.body.delivered_at;
 
 
-    const purchaseIdExisting = purchase.find((purchase)=> purchase.id === purchaseId)
+    const purchaseIdExisting = purchase.find((purchase)=> purchase.purchase_id === purchaseId)
 
     if (purchaseIdExisting) {
         throw new Error("Id já cadastrada, digite uma nova") 
@@ -286,11 +284,17 @@ app.post("/purchase", async(req: Request, res: Response) => {
 console.log(users, product, purchase)
 
 // Get Products by id
+
+// method HTTP (GET)
+// path ("/products/:id")
+// response
+// status 200
+// objeto encontrado do arquivo .db
 app.get("/product/:id", (req: Request, res: Response) => {
     
     try {
-        const id = req.params.id
-    const filterProductId = product.find((prdct) => prdct.id === id)
+        const id = req.params.purchase_id
+    const filterProductId = product.find((prdct) => prdct.id === id)//product é array do database
             
     if(!filterProductId){//se result for falsy(ñ encontrar id p/ atribuir a var), apontar erro 400
         res.status(404)//res.statusCode= 404
@@ -308,11 +312,16 @@ app.get("/product/:id", (req: Request, res: Response) => {
 })
 
 // Get User Purchases by User id
+// method HTTP (GET)
+// path ("/users/:id/purchases")
+// response
+// status 200
+// array de compras do user no arquivo .db
 app.get("/users/:id/purchases", (req: Request, res: Response) => {
     try {
     const id = req.params.id
     const filterIdPurchases = purchase.filter((prchs) =>
-        prchs.userId === id
+        prchs.buyer_id === id
     )
     if(!filterIdPurchases){
     res.status(400)

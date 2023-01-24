@@ -71,13 +71,15 @@ getProductById("02")
 
 export const purchase: TPurchase[] = [
     {
-        userId: "01",
+        buyer_id: "01",
+        purchase_id:"prc01",
         productId: "02",
         quantity: 3,
         totalPrice: 24,
     },
     {
-        userId: "02",
+        buyer_id: "02",
+        purchase_id:"prc02",
         productId: "01",
         quantity: 2,
         totalPrice: 38
@@ -95,16 +97,16 @@ queryProductsByName("Cookie brilha")
 
 
 // createPurchase (cria uma nova compra na lista de purchases)
-export const createPurchase = (userId:string, productId:string, quantity:number, totalPrice:number): void=>{
-    const newPurchase: TPurchase[]=[{userId, productId, quantity, totalPrice}]
+export const createPurchase = (buyer_id:string, purchase_id:string, productId:string, quantity:number, totalPrice:number): void=>{
+    const newPurchase: TPurchase[]=[{buyer_id, purchase_id, productId, quantity, totalPrice}]
     purchase.push(...newPurchase)
     console.log("Compra realizada com sucesso")
 }
-createPurchase("02", "02", 3, 19*3)
+createPurchase("02","puch05" ,"02", 3, 19*3)
 
 // getAllPurchasesFromUserId 
 export const getAllPurchasesFromUserId =(userIdToSearch: string): Array<TPurchase>=>{
     return purchase.filter((prchs)=>{
-        return prchs.userId === userIdToSearch
+        return prchs.buyer_id === userIdToSearch
     })
 }
