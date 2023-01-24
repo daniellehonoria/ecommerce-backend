@@ -237,7 +237,7 @@ app.post("/purchase", async(req: Request, res: Response) => {
     const purchaseId = req.body.purchase_id
     //const productId = req.body.productId
    // const quantity = req.body.quantity
-    const buyer_id = req.body.buyer_id// id do comprador(user)
+    const buyerId = req.body.buyer_id// id do comprador(user)
     const totalPrice = req.body.total_price
     const paid = req.body.paid;//pago
     //const delivered_at = req.body.delivered_at;
@@ -257,13 +257,13 @@ app.post("/purchase", async(req: Request, res: Response) => {
             res.status(400);
             throw new Error ("Valor de Preço Total inválido! Favor, informar um numero.");
         }
-    }if (buyer_id === undefined){
+    }if (buyerId === undefined){
             res.status(400);
             throw new Error ("Id de cliente não informado.");
     }
     await db.raw(`
     INSERT INTO users (purchaseId, totalPrice, paid, buyer_id)
-    VALUES (("${purchaseId}",${totalPrice}, ${paid}, "${buyer_id}"))
+    VALUES (("${purchaseId}",${totalPrice}, ${paid}, "${buyerId}"))
     `) 
     res.status(201).send("Compra realizada com sucesso")
 } catch (error) {
@@ -290,16 +290,21 @@ console.log(users, product, purchase)
 // response
 // status 200
 // objeto encontrado do arquivo .db
-app.get("/product/:id", (req: Request, res: Response) => {
+app.get("/product/:id", async(req: Request, res: Response) => {
     
     try {
-        const id = req.params.purchase_id
-    const filterProductId = product.find((prdct) => prdct.id === id)//product é array do database
+        const idProduct = req.params.id
+    // const filterProductId = product.find((prdct) => prdct.id === id)//product é array do database
             
-    if(!filterProductId){//se result for falsy(ñ encontrar id p/ atribuir a var), apontar erro 400
-        res.status(404)//res.statusCode= 404
-        throw new Error("Produto não encontrado. Verifique a 'id' .")
-    }res.status(200).send(filterProductId)
+    // if(!filterProductId){//se result for falsy(ñ encontrar id p/ atribuir a var), apontar erro 400
+    //     res.status(404)//res.statusCode= 404
+    //     throw new Error("Produto não encontrado. Verifique a 'id' .")
+    // }
+    const [prdct] = await db.raw(`
+    SELECT * FROM products
+    WHERE id = "${idProduct}" ;
+
+`);res.status(200).send({product: prdct})//product é o arry de obj de database
 
     } catch (error:any) {
         console.log(error)
@@ -317,17 +322,19 @@ app.get("/product/:id", (req: Request, res: Response) => {
 // response
 // status 200
 // array de compras do user no arquivo .db
-app.get("/users/:id/purchases", (req: Request, res: Response) => {
+app.get("/users/:id/purchases", async(req: Request, res: Response) => {
     try {
-    const id = req.params.id
-    const filterIdPurchases = purchase.filter((prchs) =>
-        prchs.buyer_id === id
-    )
-    if(!filterIdPurchases){
+    const idUser = req.params.id
+
+    if(!idUser){
     res.status(400)
     throw new Error ("Usuário não encontrado")
 }
-    res.status(200).send(filterIdPurchases)
+const [searchToUserId] = await db.raw(`
+    SELECT * FROM users
+    WHERE ID ="${idUser}"
+`)
+    res.status(200).send({idUser:searchToUserId})//perguntar pq recebe{}
     } catch (error: any) {
         console.log(error)
 
