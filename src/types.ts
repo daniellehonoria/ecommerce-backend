@@ -1,10 +1,7 @@
-export enum Category{
-    BREAD = "BREAD",
-    COOKIE= "COOKIE",
-    CAKE="CAKE"
-}
+
 export type TUser ={
     id: string
+    name:string
     email:string
     password:string
 }
@@ -13,14 +10,17 @@ export type TProduct={
     id: string
     name:string
     price:number
-    category:Category
+    description:string
+    imageURL:string
 }
 
 export type TPurchase={
     buyer_id:string
-    purchase_id:string
+    id:string
     productId:string
     quantity:number
-    totalPrice:number
+    total_price:number
+    created_at:string
+    paid:boolean
 }
 

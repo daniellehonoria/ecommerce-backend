@@ -5,18 +5,7 @@ CREATE TABLE users( -- cria tabela
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL
 );
--- Create User
--- method HTTP (POST)
--- path ("/users")
--- body
--- id
--- name
--- email
--- password
--- createdAt
--- response
--- status 201
--- "Cadastro realizado com sucesso"
+
 
 DROP TABLE users;
 INSERT INTO users(id, name, email, password)
@@ -36,7 +25,6 @@ CREATE TABLE products(
     price REAL NOT NULL,
     description TEXT,
     imageURL TEXT,
-    category TEXT NOT NULL
 );
 
 SELECT*FROM products;
@@ -111,29 +99,29 @@ ORDER BY price ASC;
 
 
 CREATE TABLE purchases(
-    id TEXT PRIMARY KEY UNIQUE NOT NULL,
-    total_price REAL UNIQUE NOT NULL,
-    paid INTEGER NOT NULL, --guarda logica booleana--pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
-    delivered_at TEXT,--gerencia data de entrega do pedido--Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato.
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,    
+    product_id TEXT NOT NULL,
+    total_price REAL NOT NULL,
+    paid INTEGER DEFAULT (0) NOT NULL, --guarda logica booleana--pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
+    created_at TEXT DEFAULT  (DATETIME('now', 'localtime')) NOT NULL,--gerencia data de entrega do pedido--Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato. POdemos tentar somar o date... date('now','+2 day')
     buyer_id TEXT NOT NULL, --FK = referencia a coluna id da tabela users
-    FOREIGN KEY(buyer_id) REFERENCES users(id)
+    FOREIGN KEY(buyer_id) REFERENCES users(id),
+    FOREIGN KEY(product_id) REFERENCES products(id)
 );
 DROP TABLE purchases;
 
-INSERT INTO purchases VALUES("p001", 33.20, 1 , "18-01-2022", 258);
-INSERT INTO purchases VALUES("p002", 38.25, 1 , "18-01-2022", 258);
 SELECT*FROM users;
 
-INSERT INTO purchases 
+INSERT INTO purchases (id, product_id,  total_price, buyer_id )
 VALUES
-("p003", 68.30, 1 , NULL, 214),
-("p004", 28.30, 0 , NULL, 214),
-("p005", 23.25, 0 , NULL, 325),
-("p006", 35.30, 1 , NULL, 325),
-("p007", 42.10, 1 , NULL, 220),
-("p008", 41.30, 0 , NULL, 220),
-("p009", 25.30, 1 , NULL, 222),
-("p010", 28.60, 1 , NULL, 222);
+("p001", "002", 68.30,  "u001"),
+("p002", "005", 150,   "u001"),
+("p003", "007", 41.20, "u002"),
+("p004", "001",  28.30, "u004"),
+("p005", "004", 23.25,  "u002"),
+("p006", "008", 35.30,  "u003"),
+("p007", "009", 42.10,  "u005"),
+("p008", "011", 28.60,  "u007");
 
 SELECT * from purchases;
 
@@ -154,8 +142,6 @@ CREATE TABLE purchases_products(
 );
 DROP TABLE purchases_products;
 SELECT * from purchases_products;
---------------------EXERCÍCIO 2--------------------------
---Popule sua tabela purchases_products simulando 3 compras de clientes.
 
 INSERT INTO purchases_products(purchase_id, product_id, quantity)
 VALUES("p001","001", 5 ),
