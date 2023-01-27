@@ -102,8 +102,8 @@ CREATE TABLE purchases(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,    
     product_id TEXT NOT NULL,
     total_price REAL NOT NULL,
-    paid INTEGER DEFAULT (0) NOT NULL, --guarda logica booleana--pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
-    created_at TEXT DEFAULT  (DATETIME('now', 'localtime')) NOT NULL,--gerencia data de entrega do pedido--Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato. POdemos tentar somar o date... date('now','+2 day')
+    paid INTEGER DEFAULT (0), --guarda logica booleana--pedidos começam com paid valendo 0 e quando o pagamento for finalizado, se atualiza para 1.
+    created_at TEXT DEFAULT  (DATETIME('now', 'localtime')),--gerencia data de entrega do pedido--Lembre-se da existência da função nativa DATETIME para gerar datas nesse formato. POdemos tentar somar o date... date('now','+2 day')
     buyer_id TEXT NOT NULL, --FK = referencia a coluna id da tabela users
     FOREIGN KEY(buyer_id) REFERENCES users(id),
     FOREIGN KEY(product_id) REFERENCES products(id)

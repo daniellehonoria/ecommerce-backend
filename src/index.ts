@@ -12,7 +12,7 @@ app.listen(3001, () => {
 
 //---------ENDPOINTS BANCO DE DADOS USUARIOS-------------
 
-// Busca todos os usuários --REFATORADO COM QUERY BUILDER
+// Busca todos os usuários 
 app.get("/users", async (req: Request, res: Response) => {
 
     try {
@@ -36,7 +36,7 @@ app.get("/users", async (req: Request, res: Response) => {
         }
     }
 })
-// Cria novos usuarios -- REFATORADO QUERY BUILDER
+// Cria novos usuarios 
 app.post("/users", async (req: Request, res: Response) => {
     try {        
         const {id, name, email, password} = req.body        
@@ -85,29 +85,7 @@ app.post("/users", async (req: Request, res: Response) => {
         }
     }
 });
-// Deleta usuário pelo id-- REFATORADO QUERY BUILDER
-app.delete("/user/:id", async(req: Request, res: Response) => {
-
-    try {
-    const idUser = req.params.id
-    
-    const [usr] = await db("users") .where({id:idUser})
-    if(usr){
-        await db("users").del().where({id:idUser})
-    } else{
-        res.status(400)
-        throw new Error("Id não econtrado")
-    }
-    res.status(200).send("User deletado com sucesso") 
-    } catch (error: any) {
-        console.log(error)
-        if (res.statusCode === 200) {
-            res.status(500)
-        }
-        res.send(error.message)
-    }
-})
-// Edita usuario pelo id -- REFATORADO QUERY BUILDER
+// Edita usuario pelo id 
 app.put("/user/:id", async(req: Request, res: Response) => {
 
     try {
@@ -177,9 +155,31 @@ app.put("/user/:id", async(req: Request, res: Response) => {
     }
    
 })
+// Deleta usuário pelo id
+app.delete("/user/:id", async(req: Request, res: Response) => {
+
+    try {
+    const idUser = req.params.id
+    
+    const [usr] = await db("users") .where({id:idUser})
+    if(usr){
+        await db("users").del().where({id:idUser})
+    } else{
+        res.status(400)
+        throw new Error("Id não econtrado")
+    }
+    res.status(200).send("User deletado com sucesso") 
+    } catch (error: any) {
+        console.log(error)
+        if (res.statusCode === 200) {
+            res.status(500)
+        }
+        res.send(error.message)
+    }
+})
 
 //---------ENDPOINTS BANCO DE DADOS PRODUTOS-------------
-//Lista todos os produtos ----REFATORADO COM QUERY BUILDER
+//Lista todos os produtos 
 app.get("/products", async(req: Request, res: Response) => {
 
     try {
@@ -204,7 +204,7 @@ app.get("/products", async(req: Request, res: Response) => {
     }
 
 })
-//Busca produto pelo nome-- REFATORADO QUERY BUILDER
+//Busca produto pelo nome
 app.get("/products/search", async (req: Request, res: Response) => {
     const nameProduct = req.query.name as string
     try {
@@ -230,7 +230,7 @@ app.get("/products/search", async (req: Request, res: Response) => {
         res.send(error.message)
     }
 })
-// Cria novo produto -- REFATORADO QUERY BUILDER
+// Cria novo produto 
 app.post("/newproduct", async(req: Request, res: Response) => {
     const {id, name, price, description, imageUrl, category} = req.body
 
@@ -270,7 +270,7 @@ await db("products").insert(newProduct)
     }
 }
 })
-// Busca produto pelo id -- REFATORADO QUERY BUILDER
+// Busca produto pelo id
 app.get("/product/:id", async(req: Request, res: Response) => {
     
     try {
@@ -297,49 +297,7 @@ res.status(200).send({product: prdctId})//product é o arry de obj de database
         
     }
 })
-// Deleta produto pelo id -- REFATORADO QUERY BUILDER
-app.delete("/product/:id", async (req: Request, res: Response) => {
-
-    try {    
-    const idProduct = req.params.id
-    const prdct = await db("products") .where({id:idProduct})
-
-    if(prdct){
-        await db("products").del().where({id:idProduct})
-    }else{
-        res.status(400)
-        throw new Error("Id não encontrado")
-    }
-
-    res.status(200).send("Produto deletado com sucesso")
-    }catch (error: any) {
-        console.log(error)
-        if (res.statusCode === 200) {
-            res.status(500)
-        }
-        res.send(error.message)
-    }
-})
-//Lista todas as purchases-- REFATORADO QUERY BUILDER
-app.get("/purchases", async (req:Request, res:Response)=>{
-    try {
-        const allPurchases = await db("purchases")
-        res.status(200).send(allPurchases)
-    } catch (error) {
-        console.log(error)
-
-        if (req.statusCode === 200) {
-            res.status(500)
-        }
-
-        if (error instanceof Error) {
-            res.send(error.message)
-        } else {
-            res.send("Erro inesperado")
-        }
-    }
-})
-// Edita produto pelo id-- REFATORADO QUERY BUILDER
+// Edita produto pelo id
 app.put("/product/:id", async(req: Request, res: Response) => {
     const idToEdit = req.params.id
     const newId = req.body.id
@@ -378,10 +336,52 @@ try {
 }
     
 })
+// Deleta produto pelo id 
+app.delete("/product/:id", async (req: Request, res: Response) => {
+
+    try {    
+    const idProduct = req.params.id
+    const prdct = await db("products") .where({id:idProduct})
+
+    if(prdct){
+        await db("products").del().where({id:idProduct})
+    }else{
+        res.status(400)
+        throw new Error("Id não encontrado")
+    }
+
+    res.status(200).send("Produto deletado com sucesso")
+    }catch (error: any) {
+        console.log(error)
+        if (res.statusCode === 200) {
+            res.status(500)
+        }
+        res.send(error.message)
+    }
+})
+
 
 //---------ENDPOINTS BANCO DE DADOS SACOLAS DE COMPRAS-------------
+//Lista todas as purchases-- REFATORADO QUERY BUILDER
+app.get("/purchases", async (req:Request, res:Response)=>{
+    try {
+        const allPurchases = await db("purchases")
+        res.status(200).send(allPurchases)
+    } catch (error) {
+        console.log(error)
 
-//Cria nova sacola de compras -- REFATORADO QUERY BUILDER
+        if (req.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+})
+//Cria nova sacola de compras 
 app.post("/purchases", async(req: Request, res: Response) => {
     
     try {
@@ -434,21 +434,28 @@ app.post("/purchases", async(req: Request, res: Response) => {
     }
 }
 })
-
-// Busca sacola pelo id do comprador-- REFATORADO QUERY BUILDER
-app.get("/users/:id/purchases", async(req: Request, res: Response) => {
+// Busca sacola pelo id 
+app.get("/purchases/:id", async(req: Request, res: Response) => {
     try {
-    const idUser = req.params.id
+    const id = req.params.id
 
-    if(!idUser){
+    if(!id){
     res.status(400)
-    throw new Error ("Usuário não encontrado")
-}
-const [searchToUserId] = await db("purchases").where({buyer_id:idUser})
- 
-//SELECT * FROM purchases: seleciona as purchases 
-//WHERE buyer_id ="${idUser}": de onde? do id de usuario
-    res.status(200).send({purchases:searchToUserId})
+    throw new Error ("Id não encontrado")
+} 
+const purchase_products = await db
+.select("purchases_products.product_id", "products.*")
+.from("purchases_products")
+.leftJoin("products", "purchases_products.product_id", "products.id")
+.where({ "purchase_id": id });
+
+const [searcheToPurchase] = await db("purchases")
+.select("purchases.*","users.email", "users.name")
+.from("purchases")
+.leftJoin("users",  "users.id", "purchases.buyer_id")
+.where({"purchases.id":id})
+
+    res.status(200).send({ compra: searcheToPurchase, produtos: purchase_products })
     } catch (error: any) {
         console.log(error)
         if (res.statusCode === 200) {
@@ -457,42 +464,78 @@ const [searchToUserId] = await db("purchases").where({buyer_id:idUser})
         res.send(error.message)
     }
 })
+// Busca sacola pelo id do usuário
+app.get("/users/:id/purchases", async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.id;
+  
+      const result = await db("purchases").where({ buyer_id: userId });
+  
+      res.status(200).send({ compras: result });
+    } catch (error) {
+      console.log(error);
+  
+      if (req.statusCode === 200) {
+        res.status(500);
+      }
+  
+      if (error instanceof Error) {
+        res.send(error.message);
+      } else {
+        res.send("Erro inesperado");
+      }
+    }
+  });
+
+//----Deleta purchase pelo id 
+app.delete("/purchases/:id", async(req:Request, res:Response)=>{
+
+    try {
+        const idToDelete = req.params.id
+
+        const [prchs]= await db("purchases").where({id: idToDelete})
+        
+        if (!prchs) {
+            res.status(400)
+            throw new Error("Id não encontrada")
+        }
+
+        await db("purchases").del().where({id: idToDelete})
+
+        res.status(200).send({message: "Compra deletada"})
+
+    }  catch (error) {
+    console.log(error)
+
+    if (req.statusCode === 200) {
+        res.status(500)
+    }
+
+    if (error instanceof Error) {
+        res.send(error.message)
+    } else {
+        res.send("Erro inesperado")
+    }
+}
+})
 
 
+//Documentação API
 //https://documenter.getpostman.com/view/24460604/2s8ZDU64nU
 
-//EXERCICIO 2 24/01
-// Crie o seguinte endpoint com query builder:
 
-// Get Purchase by id
-// method HTTP (GET)
-// path ("/purchases/:id")
-// response
-// status 200
-// um objeto contendo:
-// id da compra
-// valor total da compra
-// quando foi criada
-// status do pagamento
-// id de quem fez a compra
-// email de quem fez a compra
-// nome de quem fez a compra
 
-// Get Purchase by id -- 
-// app.get("/purchases/:id", async(req: Request, res: Response) => {
-
-//     try {
-//         const idPurchase = req.params.id
-
-//         const [prchs]= await db("purchases").where({id:idPurchase})
-    
-//     res.status(200).send({purchases:prchs})
-        
-//     } catch (error) {
-        
-//     }
-// })
 
 //Refatore o endpoint criado no exercício anterior para que o resultado bem sucedido 
 //também retorne a lista de produtos registrados na compra.
 
+// const [searcheToPurchaseId] = await db("purchases")
+// .select("purchases.*","users.email", "users.name")
+// .from("purchases")
+// .leftJoin("users",  "users.id", "purchases.buyer_id")
+// .where({"purchases.id":id})
+// const products = await db.select("products*", "purchases_products.quantity")
+// .from("purchases_products")
+// .leftJoin("products", "purchase_id", "products.id")
+// .where({"purchases_products.purchase_id":id})
+// const prodcutsInPurchase = [{...searcheToPurchaseId, products:products}]
